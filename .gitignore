@@ -7,6 +7,9 @@ myenv/
 
 ## 게임 save.txt ##
 save.txt
+
+### db 파일 ###
+*.db
  
 ### Code ###
 .vscode/*
