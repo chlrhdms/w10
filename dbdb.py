@@ -101,7 +101,7 @@ def select_num(num):
     finally:
         db.close()
     return ret
-    
+    (ss)
 
 # create_table()
 # insert_user('abc', '1234', '에비시')
