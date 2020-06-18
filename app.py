@@ -57,7 +57,7 @@ def login():
         print (pw,type(pw))
         # id와 pw가 db 값이랑 비교 해서 맞으면 맞다 틀리면 틀리다
         ret = dbdb.select_user(id, pw)
-        print(ret[2])
+        print(ret)
         if ret != None:
             session['user'] = id
             return redirect(url_for('index'))
@@ -122,4 +122,3 @@ if __name__ == '__main__':
     # with app.test_request_context():
     #       print(url_for('daum'))
     app.run(debug=True)
-    
