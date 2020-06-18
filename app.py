@@ -12,6 +12,10 @@ app.secret_key = b'aaa!111/'
 def index():
     return render_template('main.html')
 
+@app.route('/hello/')
+def hello():
+    return ('Hello, World')
+
 @app.route('/hello/<name>')
 def hellovar(name):
     character = game.set_charact(name)
@@ -23,7 +27,7 @@ def gamestart():
         date = f.read()
         character = json.loads(date)
         print(character['items'])
-    return "{}이 {} 아이템을 사용했습니다".format(character['name'], character["items"][0])
+    return "{}이 {} 아이템을 사용해서 이겼습니다".format(character['name'], character["items"][0])
 
 @app.route('/input/<int:num>')
 def input_num(num):
@@ -113,6 +117,14 @@ def getinfo():
         return render_template('getinfo.html', data=ret)
 
     return redirect(url_for('login'))
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return "페이지가 없습니다. URL을 확인 하세요", 404
+
+@app.route('/img')
+def img():
+    return render_template('image.html')
 
 
 
