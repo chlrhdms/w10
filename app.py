@@ -61,7 +61,6 @@ def login():
         if ret != None:
             session['user'] = id
             return redirect(url_for('index'))
-
         else:
             return redirect(url_for('login'))
 
@@ -117,15 +116,6 @@ def getinfo():
         return render_template('getinfo.html', data=ret)
 
     return redirect(url_for('login'))
-
-@app.errorhandler(404)
-def page_not_found(error):
-    return "페이지가 없습니다. URL을 확인 하세요", 404
-
-@app.route('/img')
-def img():
-    return render_template('image.html')
-
 
 
 if __name__ == '__main__':
