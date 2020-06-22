@@ -18,3 +18,4 @@ def save_game(filename, charact):
         print("%s:%s"  % (key, charact[key]))
         f.write("%s:%s\n" % (key, charact[key]))
     f.close()
+    
