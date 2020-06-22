@@ -13,12 +13,6 @@ app.secret_key = b'aaa!111/'
 def index():
     return render_template('main.html')
 
-#게임 불가
-@app.route('/hello/<name>')
-def hellovar(name):
-    character = game.set_charact(name)
-    return render_template('gamestart.html', data=character)
-
 #게임(시작)
 @app.route('/gamestart')
 def gamestart():
