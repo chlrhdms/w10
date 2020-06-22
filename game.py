@@ -1,13 +1,11 @@
 import json
+
 def set_charact(name):
-
-
     character = {
         "name": name,
-        "level": 1,
-        "hp": 100,
         "items": ["주먹", "발차기", "겁주기"],
-        "skill": ["방패", "순발력", "아기호랑이"]
+        "skill": ["방패", "순발력", "귀신"],
+        "run": ["성공", "실패"]
     }
     with open("static/save.txt", "w", encoding="utf-8") as f:
         json.dump(character, f, ensure_ascii = False, indent=4)

@@ -1,12 +1,13 @@
-<!DOCTYPE html>
-<html>
-<body>
-<h2>게임 시작</h2>
-{{ data.name}}님의 모험을 시작합니다. (HP {{data.hp}})<br>
+{% extends "layout.html" %}
+{% block title %}게임 시작{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<h2>게임</h2>
+{{ data.name}}님의 모험을 시작합니다.<br>
 호랑이가 나타났습니다!<br>
-<a href={{ url_for('input_num', num=1) }}>1. 싸운다</a> <br>
-<a href={{ url_for('input_num', num=2) }}>2. 놀아준다</a> <br>
-<a href={{ url_for('input_num', num=3) }}>3. 도망간다</a>
-
-</body>
-</html>
+<button type="button" class="btn btn-danger"><a href={{ url_for('input_num', num=1) }}>1. 공격하기</a></button>
+<button type="button" class="btn btn-danger"><a href={{ url_for('input_num', num=2) }}>2. 방어하기</a></button>
+<button type="button" class="btn btn-danger"><a href={{ url_for('input_num', num=3) }}>3. 도망간다</a></button>
+{% endblock %}

@@ -3,6 +3,7 @@ from flask import Flask, request, render_template, redirect, url_for, abort, ses
 import game
 import json
 import dbdb
+import random
 
 app = Flask(__name__)
 
@@ -12,23 +13,23 @@ app.secret_key = b'aaa!111/'
 def index():
     return render_template('main.html')
 
-@app.route('/hello/')
-def hello():
-    return ('Hello, World')
-
+#게임 불가
 @app.route('/hello/<name>')
 def hellovar(name):
     character = game.set_charact(name)
     return render_template('gamestart.html', data=character)
 
+#게임(시작)
 @app.route('/gamestart')
 def gamestart():
-    with open("static/save.txt", "r", encoding='utf-8') as f:
-        date = f.read()
-        character = json.loads(date)
-        print(character['items'])
-    return "{}이 {} 아이템을 사용해서 이겼습니다".format(character['name'], character["items"][0])
+    if 'user' in session:
+        with open("static/save.txt", "r", encoding='utf-8') as f:
+            date = f.read()
+            character = json.loads(date)
+        return render_template('gamestart.html', data=character)
+    return redirect(url_for('login'))
 
+#게임(진행)
 @app.route('/input/<int:num>')
 def input_num(num):
     if num == 1:
@@ -36,13 +37,20 @@ def input_num(num):
             date = f.read()
             character = json.loads(date)
             print(character['items'])
-        return "{}이 {} 아이템을 사용했습니다".format(character['name'], character["items"][0])
+        return "{}님이 {}(으)로 공격했습니다<br><button type='button' class='btn btn-danger'><a class='nav-link' href=/gamestart>다음</a></button>".format(character['name'], random.choice(character["items"]))
     elif num == 2:
-        return '도망갔다'
+        with open("static/save.txt", "r", encoding='utf-8') as f:
+            date = f.read()
+            character = json.loads(date)
+            print(character['skill'])
+        return "{}님이 {}(으)로 방어했습니다<br><button type='button' class='btn btn-danger'><a class='nav-link' href=/gamestart>다음</a></button>".format(character['name'], random.choice(character["skill"]))
     elif num == 3:
-        return '퉁퉁이'
-    else: 
-        return "없어요"
+        with open("static/save.txt", "r", encoding='utf-8') as f:
+            date = f.read()
+            character = json.loads(date)
+            print(character['run'])
+        return "{}님이 도망에 {} 했습니다<br><button type='button' class='btn btn-danger'><a class='nav-link' href=/gamestart>다음</a></button>".format(character['name'], random.choice(character["run"]))
+    
     # return "hello {}".format(name)
 
 #로그인
@@ -60,10 +68,12 @@ def login():
         print(ret)
         if ret != None:
             session['user'] = id
+            game.set_charact(ret[2])
             return redirect(url_for('index'))
         else:
             return redirect(url_for('login'))
 
+#로그아웃
 @app.route('/logout')
 def logout():
     session.pop('user', None)
@@ -93,32 +103,6 @@ def join():
         dbdb.insert_user(id, pw, name)
         return redirect(url_for('login'))
 
-@app.route('/form')
-def form():
-    return render_template('test.html')
-
-@app.route('/method', methods=['GET', 'POST'])
-def method():
-    if request.method == 'GET':
-        return 'GET 으로 전송이다.'
-    else:
-        num = request.form['num']
-        name = request.form['name']
-        print(num, name)
-        dbdb.insert_data(num, name)
-        return 'POST 이다. 학번: {} 이름:{}'.format(num,name)
-
-@app.route('/getinfo') 
-def getinfo():
-    if 'user' in session:
-        ret = dbdb.select_all()
-        print(ret[3])
-        return render_template('getinfo.html', data=ret)
-
-    return redirect(url_for('login'))
-
 
 if __name__ == '__main__':
-    # with app.test_request_context():
-    #       print(url_for('daum'))
     app.run(debug=True)
